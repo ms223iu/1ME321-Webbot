@@ -12,7 +12,7 @@
       <Result v-if="student" :student="student"></Result>
     </transition>
 
-    <Loader v-if="isExecuting"></Loader>
+    <Loader v-show="isExecuting"></Loader>
   </div>
 </template>
 
