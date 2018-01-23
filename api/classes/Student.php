@@ -12,7 +12,7 @@ class Student
             throw new Exception('No username passed as constructor parameter');
         }
 
-        $this->username = trim($username);
+        $this->username = strtolower(trim($username));
         $this->homeUrl = 'https://fc.lnu.se/~' . $this->username;
     }
 
