@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <transition name="fade1">
-      <Info v-if="!isExecuting" :firstExecute="firstExecute"></Info>
+      <Info v-show="!isExecuting" :firstExecute="firstExecute"></Info>
     </transition>
 
     <transition name="fade2">
-      <Search v-show="!isExecuting" ></Search>
+      <Search v-show="!isExecuting"></Search>
     </transition>
 
     <transition name="fade3">
-      <Result v-if="this.student" :student="this.student" ></Result>
+      <Result v-if="student" :student="student"></Result>
     </transition>
 
-    <Loader v-if="this.isExecuting"></Loader>
+    <Loader v-if="isExecuting"></Loader>
   </div>
 </template>
 
@@ -50,12 +50,6 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
-* {
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-
 body {
   background-color: #e1e8f0;
   font-family: 'Open Sans', sans-serif;
@@ -83,7 +77,7 @@ body {
 }
 
 .fade3-enter-active {
-  transition-delay: 120ms;
+  transition-delay: 110ms;
 }
 
 .fade1-enter, .fade2-enter, .fade3-enter {

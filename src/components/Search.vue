@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="search">
-    <input :class="{ 'inputError' : validationError }" v-model='studentUsername' @keyup.enter='$refs.btnCheck.click()' ref='input' @keydown.space.prevent type="text" placeholder="användarnamn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus>
-    <button @click='studentCheckRequest' :disabled="isExecuting || validationError || studentUsername.length === 0" ref="btnCheck">Kontrollera</button>
+    <input :class="{ 'inputError' : hasValidationError }" v-model='studentUsername' @keyup.enter='$refs.btnCheck.click()' ref='input' @keydown.space.prevent type="text" placeholder="användarnamn" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus>
+    <button @click='studentCheckRequest' :disabled="isExecuting || hasValidationError" ref="btnCheck">Kontrollera</button>
   </div>
 </template>
 
@@ -13,7 +13,6 @@ export default {
     return {
       studentUsername: '',
       isExecuting: false,
-      validationError: false,
       studentData: ''
     }
   },
@@ -25,14 +24,12 @@ export default {
 
     isExecuting: function() {
       EventBus.$emit('isExecuting', this.isExecuting);
-    },
+    }
+  },
 
-    studentUsername: function() {
-      if(this.studentUsername.match("^[a-zA-Z0-9]+$") && this.studentUsername.length < 10) {
-        this.validationError = false;
-      } else{
-        this.validationError = true;
-      }
+  computed: {
+    hasValidationError() {
+      return !this.studentUsername.match("^[a-zA-Z0-9]+$") || this.studentUsername.length != 7;
     }
   },
 
@@ -86,6 +83,9 @@ input {
   text-transform: lowercase;
   width: 100%;
   padding-right: 150px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 button {
@@ -97,12 +97,7 @@ button {
 }
 
 button:hover {
-  color: #9068be;
-  background-color: #6ed3cf;
-}
-
-button:active {
-  background-color: #6accc8;
+  background-color: #845faf;
 }
 
 button:disabled {
@@ -111,7 +106,7 @@ button:disabled {
 }
 
 .inputError {
-  box-shadow: 0 0 7px red;
+  box-shadow: 0 0 7px #845faf;
 }
 
 ::-webkit-input-placeholder {
@@ -133,7 +128,6 @@ button:disabled {
 @media (hover: none) {
    button:hover {
      background-color: #9068be;
-     color: white;
    }
 
    button:disabled {
