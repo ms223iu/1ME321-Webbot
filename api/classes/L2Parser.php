@@ -105,7 +105,7 @@ class L2Parser
      */
     public function hasEntity()
     {
-        return $this->html === html_entity_decode($this->html, ENT_NOQUOTES) ? false : true;
+        return $this->html === html_entity_decode($this->html, ENT_QUOTES | ENT_HTML5, 'UTF-8') ? false : true;
     }
 
     /**
