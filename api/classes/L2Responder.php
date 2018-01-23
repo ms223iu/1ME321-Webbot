@@ -45,18 +45,9 @@ class L2Responder
     {
         $reqPass = 'Indexfil hittades';
         $reqFail = 'Ingen Indexfil hittades';
-        $comFail = 'Ingen indexfil hittades. Dubbelkolla filens placering, namn och filtyp.';
+        $comFail = 'Ingen indexfil hittades. Kontrollera filens placering, namn och filtyp.';
 
         return $this->parser->hasIndex() ? $this->respond($reqPass, true) : $this->respond($reqFail, false, $comFail);
-    }
-
-    private function getValidCodeResponse()
-    {
-        $reqPass = 'Koden är validerad';
-        $reqFail = 'Koden är inte validerad';
-        $comFail = 'Din HTML-kod är inte validerad. <b>Detta kan påverka resultatet av de andra testerna.</b> Validera koden och kör om testet.';
-
-        return $this->parser->hasValidCode() ? $this->respond($reqPass, true) : $this->respond($reqFail, false, $comFail);
     }
 
     private function getTitleResponse()
@@ -64,7 +55,7 @@ class L2Responder
         $title = $this->parser->getTitle();
 
         $reqPass = 'Titel hittades';
-        $comPass = "Din titel på sidan är '$title'. Kontrollera att titeln är relevant.";
+        $comPass = "Din titel på sidan är \"$title\". Kontrollera att titeln är relevant.";
 
         $reqFail = 'Ingen titel hittades';
         $comFail = 'Lägg till en titel på din hemsida.';
@@ -76,7 +67,7 @@ class L2Responder
     {
         $reqPass = 'Rubrik hittades';
         $reqFail = 'Ingen rubrik hittades';
-        $comFail = 'Lägg till några rubriker på din ingångssida.';
+        $comFail = 'Lägg till minst en rubrik på din ingångssida.';
 
         return ($this->parser->getHeaderTags() > 0) ? $this->respond($reqPass, true) : $this->respond($reqFail, false, $comFail);
     }
@@ -101,18 +92,18 @@ class L2Responder
 
     private function getHasAbsoluteUrlResponse()
     {
-        $reqPass = 'En absolut länk hittades';
+        $reqPass = 'Absolut länk hittades';
         $reqFail = 'Ingen absolut länk hittades';
-        $comFail = 'Lägg till en länk med absolut adressering.';
+        $comFail = 'Lägg till minst en länk med en absolut adress.';
 
         return $this->parser->hasAbsoluteUrl() ? $this->respond($reqPass, true) : $this->respond($reqFail, false, $comFail);
     }
 
     private function getDoldUrlResponse()
     {
-        $reqPass = 'Relativ länk till dold-mappen';
-        $reqFail = 'Länken till den dolda mappen är inte relativ';
-        $comFail = 'Lägg till länken till den dolda mappen med en relativ adress.';
+        $reqPass = 'Relativ länk till dold-mappen hittades';
+        $reqFail = 'Ingen relativ länk till dold-mappen hittades';
+        $comFail = 'Lägg till en länk till dold-mappen med en relativ adress.';
 
         return $this->parser->hasRelativeDoldUrl() ? $this->respond($reqPass, true) : $this->respond($reqFail, false, $comFail);
     }
@@ -121,7 +112,7 @@ class L2Responder
     {
         $reqPass = 'Entitet hittades';
         $reqFail = 'Ingen entitet hittades';
-        $comFail = 'Lägg till några entitet på din ingångssida.';
+        $comFail = 'Lägg till minst en entitet på din ingångssida.';
 
         return $this->parser->hasEntity() ? $this->respond($reqPass, true) : $this->respond($reqFail, false, $comFail);
     }
