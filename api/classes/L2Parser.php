@@ -1,6 +1,6 @@
 <?php
-require_once(__DIR__ . '../../libs/simple_html_dom.php');
-require_once(__DIR__ . '/../classes/service/HTTPTools.php');
+require_once(__DIR__ . '/../libs/simple_html_dom.php');
+require_once(__DIR__ . '/service/HTTPTools.php');
 
 class L2Parser
 {
@@ -14,6 +14,7 @@ class L2Parser
         $this->student->setHasIndex($this->checkIndexExists());
 
         if ($this->student->hasIndex()) {
+            // Indexpage was found, get its HTML
             $this->html = HTTPTools::getHtml($this->student->getHomeUrl() . '/');
             $this->htmlObject = str_get_html($this->html);
         }
@@ -21,7 +22,7 @@ class L2Parser
 
     /**
      * Retrrns true if Students indexpage could be found
-     * @return boolean
+     * @return Boolean
      */
     public function hasIndex()
     {
@@ -59,12 +60,12 @@ class L2Parser
 
     /**
      * Checks if students HTML-code does contain an image with relative address
-     * @return boolean
+     * @return Boolean
      */
     public function hasRelativeImgAddress()
     {
-        foreach ($this->htmlObject->find('img') as $e) {
-            if (strpos(strtolower($e->src), 'http') !== 0) {
+        foreach ($this->htmlObject->find('img[src]') as $e) {
+            if (strpos(strtolower($e->src), 'http://') !== 0 || strpos(strtolower($e->src), 'https://') !== 0) {
                 return true;
             }
         }
@@ -73,12 +74,12 @@ class L2Parser
 
     /**
      * Checks Students HTML-code for absolute URLs
-     * @return boolean
+     * @return Boolean
      */
     public function hasAbsoluteUrl()
     {
-        foreach ($this->htmlObject->find('a') as $e) {
-            if (strpos(strtolower($e->href), 'http') === 0) {
+        foreach ($this->htmlObject->find('a[href]') as $e) {
+            if (strpos(strtolower($e->href), 'http://') === 0 || strpos(strtolower($e->href), 'https://') === 0) {
                 return true;
             }
         }
@@ -87,12 +88,12 @@ class L2Parser
 
     /**
      * Checks Students HTML-code for an relative URL to the dold-folder
-     * @return boolean
+     * @return Boolean
      */
     public function hasRelativeDoldUrl()
     {
-        foreach ($this->htmlObject->find('a') as $e) {
-            if (strpos(strtolower($e->href), 'dold') === 0) {
+        foreach ($this->htmlObject->find('a[href]') as $e) {
+            if (strpos(strtolower($e->href), 'dold/') === 0) {
                 return true;
             }
         }
@@ -101,7 +102,7 @@ class L2Parser
 
     /**
      * Checks if students HTML-code contains an entity
-     * @return boolean
+     * @return Boolean
      */
     public function hasEntity()
     {
@@ -110,7 +111,7 @@ class L2Parser
 
     /**
      * Checks if HTML contains any CSS-code.
-     * @return boolean
+     * @return Boolean
      */
     public function hasCss()
     {
@@ -128,7 +129,7 @@ class L2Parser
 
     /**
      * Checks if scripts are used
-     * @return boolean
+     * @return Boolean
      */
     public function hasScripts()
     {

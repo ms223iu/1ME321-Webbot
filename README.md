@@ -1,3 +1,4 @@
+
 # 1ME321 Kontrollverktyg
 Detta verktyget kan användas för att kontrollera de vanligaste felen i Labb 2 (U1) i kursen Webbteknik 1 (1ME321).
 
@@ -5,15 +6,25 @@ Detta verktyget kan användas för att kontrollera de vanligaste felen i Labb 2 
 Sidan finns tillgänglig på [https://webbot.maciejsiwek.com](https://webbot.maciejsiwek.com). Använd *ms223iu* som användarnamn för att testa funktionaliteten.
 
 ## Build Setup
+### Front-end
 ``` bash
-# install dependencies
+# Install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
-npm run dev
+# Change the "host" IP in webpack.config.js to your local IP
+devServer: {
+	 ...
+	 host: "xxx.xxx.xxx.xxx",
+	 port: 80,
+	 ...
+ }
 
-# build for production with minification
-npm run build
+# Serve with hot reload
+npm run dev
 ```
 
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+### Back-end
+``` bash
+# Serve from the api-folder using PHPs build-in server
+php -S <your-local-ip>:9000
+```

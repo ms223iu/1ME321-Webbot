@@ -13,11 +13,11 @@ $username = trim($_POST['username']);
 // Single student validation request
 if ($method == 'student' && ctype_alnum($username) && strlen($username) < 10) {
     $student = new Student($username);
-    $L2Responder = new L2Responder(new L2Parser($student));
+    $l2responder = new L2Responder(new L2Parser($student));
 
     // Generate response
     echo json_encode(array(
       'username' => $student->getUsername(),
-      'result' => $L2Responder->getResult()
+      'result' => $l2responder->getResult()
     ));
 }
