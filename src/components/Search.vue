@@ -29,7 +29,7 @@ export default {
 
   computed: {
     hasValidationError() {
-      return !this.studentUsername.match("^[a-zA-Z0-9]+$") || this.studentUsername.length != 7;
+      return !this.studentUsername.match("^[a-zA-Z0-9]+$") || this.studentUsername.length < 6 || this.studentUsername.length > 7;
     }
   },
 
