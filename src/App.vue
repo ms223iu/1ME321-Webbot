@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <transition name="fade1">
-      <Info v-show="!isExecuting" :firstExecute="firstExecute"></Info>
+      <Info v-if="!isExecuting" :firstExecute="firstExecute"></Info>
     </transition>
 
     <transition name="fade2">
