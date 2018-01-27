@@ -1,11 +1,13 @@
 var path = require('path')
 var webpack = require('webpack')
+const webpackIf = require('webpack-if');
+const ifProd = webpackIf.ifElse(process.env.NODE_ENV === 'production');
 
 module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist/'),
-    publicPath: '/dist/',
+    publicPath: ifProd('./dist/', '/dist/'),
     filename: 'build.js'
   },
   module: {
