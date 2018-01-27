@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . '/../libs/simple_html_dom.php');
 require_once(__DIR__ . '/service/HTTPTools.php');
+require_once(__DIR__ . '/Link.php');
 
 class L2Parser
 {
@@ -136,6 +137,27 @@ class L2Parser
         return count($this->htmlObject->find('script')) > 0;
     }
 
+    public function getBrokenLinks()
+    {
+        $resources = [];
+        $links['BROKEN'] = [];
+        $links['SKIPPED'] = 0;
+
+        foreach ($this->htmlObject->find('a[href]') as $e) {
+            $resources[] = new Link($e->href, $this->student->getUsername());
+        }
+
+        foreach ($resources as $link) {
+            if ($link->public()) {
+                $links['BROKEN'] = $link->getUrl();
+            } else {
+                $links['SKIPPED']++;
+            }
+        }
+
+        return $links;
+    }
+
     /**
      * Checks if students FirstClass account contains an index-page (index.html or index.htm)
      * @return Boolean
@@ -145,7 +167,7 @@ class L2Parser
         $pagesToCheck = ['index.html', 'index.htm'];
 
         foreach ($pagesToCheck as $page) {
-            if (HTTPTools::getHttpStatusCode($this->student->getHomeUrl() . '/' . $page) == 200) {
+            if (HTTPTools::getHttpCode($this->student->getHomeUrl() . '/' . $page) == 200) {
                 return true;
             }
         }

@@ -11,6 +11,7 @@ class L2Responder
 
         // Index page was found
         if ($parser->hasIndex()) {
+            $this->addResult($this->getBrokenLinksResponse());
             $this->addResult($this->getIndexResponse());
             $this->addResult($this->getTitleResponse());
             $this->addResult($this->getHeaderTagsResponse());
@@ -144,6 +145,14 @@ class L2Responder
         $com = 'JavaScript får inte användas. Ta bort all JavaScript-kod.';
 
         return $this->respond($req, false, $com);
+    }
+
+    public function getBrokenLinksResponse()
+    {
+        $result = $this->parser->getBrokenLinks();
+        $resp = 'BROKEN: ' . count($result['BROKEN']) . ' | SKIPPED: ' . $result['SKIPPED'];
+
+        return $this->respond('LINKS TEST', false, $resp);
     }
 
     private function respond($requirement, $status, $comment=null)
