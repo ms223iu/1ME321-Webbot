@@ -147,12 +147,38 @@ class L2Responder
         return $this->respond($req, false, $com);
     }
 
+    // @TODO Fix this mess
     public function getBrokenLinksResponse()
     {
         $result = $this->parser->getBrokenLinks();
-        $resp = 'BROKEN: ' . count($result['BROKEN']) . ' | SKIPPED: ' . $result['SKIPPED'];
+        $broken = $result['BROKEN'];
+        $skipped = $result['SKIPPED'];
 
-        return $this->respond('LINKS TEST', false, $resp);
+        $reqPass = 'Inga brutna länkas hittades';
+
+        $reqFail = 'Brutna länkar hittades';
+        $comFail = "Följande länkar är brutna på ingångssidan ";
+
+        if ($skipped > 0) {
+            $comPass = "$skipped länkar hoppades över eftersom dessa pekar till filer inuti dold-mappen.";
+            $comFail .= "($skipped länkar hoppades över eftersom dessa pekar till filer inuti dold-mappen):";
+        } else {
+            $comPass = null;
+        }
+
+        $comFail .= '<ul>';
+
+        foreach ($broken as $link) {
+            $comFail .= "<li>$link</li>";
+        }
+
+        $comFail .= '</ul>';
+
+        if ($skipped > 0) {
+            return count($broken) == 0 ? $this->respond($reqPass, true, $comPass) : $this->respond($reqFail, false, $comFail);
+        }
+
+        return count($broken) == 0 ? $this->respond($reqPass, true) : $this->respond($reqFail, false, $comFail);
     }
 
     private function respond($requirement, $status, $comment=null)
