@@ -11,7 +11,6 @@ class L2Responder
 
         // Index page was found
         if ($parser->hasIndex()) {
-            $this->addResult($this->getBrokenLinksResponse());
             $this->addResult($this->getIndexResponse());
             $this->addResult($this->getTitleResponse());
             $this->addResult($this->getHeaderTagsResponse());
@@ -19,6 +18,7 @@ class L2Responder
             $this->addResult($this->getRelativeImgResponse());
             $this->addResult($this->getHasAbsoluteUrlResponse());
             $this->addResult($this->getDoldUrlResponse());
+            $this->addResult($this->getBrokenLinksResponse());
             $this->addResult($this->getEntityResponse());
             $this->addResult($this->getParagraphTagsResponse());
 

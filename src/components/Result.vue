@@ -10,7 +10,7 @@
       <div v-if="value.comment">
         <hr>
         <div class="comment">
-          <p><b>Kommentar:</b> {{ value.comment }}</p>
+          <p><b>Kommentar: </b><span v-html="value.comment"></span></p>
         </div>
       </div>
     </div>

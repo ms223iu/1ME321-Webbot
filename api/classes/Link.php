@@ -4,64 +4,50 @@ require_once(__DIR__ . '/service/HTTPTools.php');
 class Link
 {
     private $url;
-    private $type;
-    private $public;
     private $httpCode;
 
     public function __construct($url, $username)
     {
         $this->url = $this->setUrl($url, $username);
-        $this->type = $this->setType($url);
-        $this->public = $this->isPublic($url);
-        $this->httpCode = $this->scan($this->url);
+
+        if ($this->isPublic()) {
+            $this->httpCode = $this->request($this->url);
+        }
     }
 
     public function getUrl()
     {
-        return $this->url;
+        return htmlspecialchars($this->url, ENT_QUOTES, 'UTF-8');
     }
 
-    public function getType()
+    public function isBroken()
     {
-        return $this->type;
-    }
-
-    public function toString()
-    {
-        return 'URL: ' . $this->url . ' | Code: ' . $this->httpCode . ' | Public: ' . $this->public;
+        return $this->httpCode === 404;
     }
 
     private function setUrl($url, $username)
     {
+        $url = str_replace(' ', '%20', $url);
+
         if ($this->isAbsolute($url)) {
             return $url;
-        } elseif (strpos($url, '/') === 0) {
+        }
+
+        if (strpos($url, '/') === 0) {
             return 'https://fc.lnu.se/~' . $username . $url;
-        } else {
-            return 'https://fc.lnu.se/~' . $username . '/' . $url;
         }
+
+        return 'https://fc.lnu.se/~' . $username . '/' . $url;
     }
 
-    private function setType($url)
+    public function isPublic()
     {
-        return $this->isAbsolute($url) ? true : false;
+        return strpos(strtolower($this->url), 'dold/') !== 0 && strpos(strtolower($this->url), '/dold/') === false ? true : false;
     }
 
-    public function public()
+    private function request($url)
     {
-        return $this->public;
-    }
-
-    private function isPublic($url)
-    {
-        return strpos(strtolower($url), 'dold/') !== 0 && strpos($url, '/dold/') === false ? true : false;
-    }
-
-    private function scan($url)
-    {
-        if ($this->public) {
-            return HTTPTools::getHttpCodeWithRedirect($url);
-        }
+        return HTTPTools::getHttpCodeWithRedirect($url);
     }
 
     private function isAbsolute($url)

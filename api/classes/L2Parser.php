@@ -137,6 +137,11 @@ class L2Parser
         return count($this->htmlObject->find('script')) > 0;
     }
 
+    /**
+     * Searches for broken links (href and img only) in current htmlObject.
+     * @return Array where ['BROKEN'] array contains broken links and
+     * ['SKIPPED'] is an Integer with amount of not scanned links.
+     */
     public function getBrokenLinks()
     {
         $resources = [];
@@ -144,13 +149,19 @@ class L2Parser
         $links['SKIPPED'] = 0;
 
         foreach ($this->htmlObject->find('a[href]') as $e) {
-            $resources[] = new Link($e->href, $this->student->getUsername());
+            if (strpos(strtolower($e->href), 'mailto:') !== 0 && strpos($e->href, '#') !== 0) {
+                $resources[] = new Link($e->href, $this->student->getUsername());
+            }
+        }
+
+        foreach ($this->htmlObject->find('img[src]') as $e) {
+            $resources[] = new Link($e->src, $this->student->getUsername());
         }
 
         foreach ($resources as $link) {
-            if ($link->public()) {
-                $links['BROKEN'] = $link->getUrl();
-            } else {
+            if ($link->isBroken()) {
+                $links['BROKEN'][] = $link->getUrl();
+            } elseif (!$link->isPublic()) {
                 $links['SKIPPED']++;
             }
         }
