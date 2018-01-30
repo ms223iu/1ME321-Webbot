@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__ . '/../libs/simple_html_dom.php');
 require_once(__DIR__ . '/service/HTTPTools.php');
+require_once(__DIR__ . '/service/Util.php');
 require_once(__DIR__ . '/Link.php');
 
 class L2Parser
@@ -66,7 +67,7 @@ class L2Parser
     public function hasRelativeImgAddress()
     {
         foreach ($this->htmlObject->find('img[src]') as $e) {
-            if (strpos(strtolower($e->src), 'http://') !== 0 || strpos(strtolower($e->src), 'https://') !== 0) {
+            if (!Util::startsWith($e->src, 'http://') || !Util::startsWith($e->src, 'https://')) {
                 return true;
             }
         }
@@ -80,7 +81,7 @@ class L2Parser
     public function hasAbsoluteUrl()
     {
         foreach ($this->htmlObject->find('a[href]') as $e) {
-            if (strpos(strtolower($e->href), 'http://') === 0 || strpos(strtolower($e->href), 'https://') === 0) {
+            if (Util::startsWith($e->href, 'http://') || Util::startsWith($e->href, 'https://')) {
                 return true;
             }
         }
@@ -94,7 +95,7 @@ class L2Parser
     public function hasRelativeDoldUrl()
     {
         foreach ($this->htmlObject->find('a[href]') as $e) {
-            if (strpos(strtolower($e->href), 'dold/') === 0) {
+            if (Util::startsWith($e->href, 'dold/') || Util::startsWith($e->href, './dold/')) {
                 return true;
             }
         }
@@ -149,7 +150,7 @@ class L2Parser
         $links['SKIPPED'] = 0;
 
         foreach ($this->htmlObject->find('a[href]') as $e) {
-            if (strpos(strtolower($e->href), 'mailto:') !== 0 && strpos($e->href, '#') !== 0) {
+            if (!Util::startsWith($e->href, 'mailto:') && !Util::startsWith($e->href, '#')) {
                 $resources[] = new Link($e->href, $this->student->getUsername());
             }
         }
@@ -159,7 +160,7 @@ class L2Parser
         }
 
         foreach ($resources as $link) {
-            if ($link->isBroken()) {
+            if ($link->isNotFound()) {
                 $links['BROKEN'][] = $link->getUrl();
             } elseif (!$link->isPublic()) {
                 $links['SKIPPED']++;
