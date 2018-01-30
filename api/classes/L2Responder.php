@@ -154,16 +154,15 @@ class L2Responder
         $broken = $result['BROKEN'];
         $skipped = $result['SKIPPED'];
 
-        $reqPass = 'Inga brutna länkas hittades';
+        $reqPass = 'Inga brutna länkar hittades';
+        $comPass = null;
 
         $reqFail = 'Brutna länkar hittades';
         $comFail = "Följande länkar är brutna på ingångssidan ";
 
         if ($skipped > 0) {
-            $comPass = "$skipped länkar hoppades över eftersom dessa pekar till filer inuti dold-mappen.";
-            $comFail .= "($skipped länkar hoppades över eftersom dessa pekar till filer inuti dold-mappen):";
-        } else {
-            $comPass = null;
+            $comPass = "Några länkar hoppades över eftersom dessa pekar till filer inuti dold-mappen.";
+            $comFail .= "(några länkar hoppades över eftersom dessa pekar till filer inuti dold-mappen):";
         }
 
         $comFail .= '<ul>';
