@@ -10,6 +10,8 @@ class HTTPTools
         curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($c, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($c, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($c, CURLOPT_TIMEOUT, 5);
         curl_exec($c);
         $code = curl_getinfo($c, CURLINFO_HTTP_CODE);
         curl_close($c);
@@ -26,6 +28,8 @@ class HTTPTools
         curl_setopt($c, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($c, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($c, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($c, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($c, CURLOPT_TIMEOUT, 5);
         curl_exec($c);
         $code = curl_getinfo($c, CURLINFO_HTTP_CODE);
         curl_close($c);
