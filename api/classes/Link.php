@@ -4,23 +4,21 @@ require_once(__DIR__ . '/service/Util.php');
 
 class Link
 {
-    private $url;
-    private $fullUrl;
+    private $absoluteUrl;
     private $httpCode;
 
     /**
      * Creates absolute URL based on the URL and username provided and
-     * if possible gets the http status code
+     * if possible gets the http-code
      * @param String $url
      * @param String $username Students username
      */
     public function __construct($url, $username)
     {
-        $this->url = $url;
-        $this->fullUrl = $this->setUrl($url, $username);
+        $this->absoluteUrl = $this->setUrl($url, $username);
 
         if ($this->isPublic()) {
-            $this->httpCode = $this->request($this->fullUrl);
+            $this->httpCode = $this->request($this->absoluteUrl);
         }
     }
 
@@ -30,11 +28,11 @@ class Link
      */
     public function getUrl()
     {
-        return htmlspecialchars($this->url, ENT_QUOTES, 'UTF-8');
+        return htmlspecialchars($this->absoluteUrl, ENT_QUOTES, 'UTF-8');
     }
 
     /**
-     * Returns true if the returned http status code is 404, else false
+     * Returns true if the returned http-code is 404, else false
      * @return Boolean
      */
     public function isNotFound()
@@ -43,10 +41,10 @@ class Link
     }
 
     /**
-     * Converts the url into an absolute URL
+     * Checks if an URL is relative and converts it into an absolute URL if needed
      * @param String $url
      * @param String $username Students username
-     * @return String Full URL
+     * @return String Absolute URL
      */
     private function setUrl($url, $username)
     {
@@ -69,7 +67,7 @@ class Link
      */
     public function isPublic()
     {
-        return !Util::startsWith($this->fullUrl, 'dold/') && !Util::contains($this->fullUrl, '/dold/') ? true : false;
+        return !Util::startsWith($this->absoluteUrl, 'dold/') && !Util::contains($this->absoluteUrl, '/dold/') ? true : false;
     }
 
     /**
@@ -83,7 +81,7 @@ class Link
     }
 
     /**
-     * Checks if an URL is absolute by checking its beginning
+     * Checks if the provided URL is absolute
      * @param  String  $url
      * @return Boolean
      */
